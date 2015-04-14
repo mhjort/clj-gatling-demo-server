@@ -22,13 +22,14 @@
       (println "Ongoing requests:" requests))))
 
 (defn run [threads-str]
-  (let [threads (if threads-str
+  (let [port (read-string (or (System/getenv "PORT") "8080"))
+        threads (if threads-str
                   (read-string threads-str)
                   300)
         executor (ScheduledThreadPoolExecutor. 1)
-        stop-server-fn (run-server (handler/api app-routes) {:port 8080 :join? false :thread threads})]
+        stop-server-fn (run-server (handler/api app-routes) {:port port :join? false :thread threads})]
     (.scheduleAtFixedRate executor print-ongoing-requests 0 50 TimeUnit/MILLISECONDS)
-    (println "Server started at port 8080 with" threads "threads.")
+    (println "Server started at port" port "with" threads "threads.")
     (fn []
       (stop-server-fn)
       (.shutdownNow executor))))
