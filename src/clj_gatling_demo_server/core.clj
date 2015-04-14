@@ -7,14 +7,18 @@
 (def ongoing-requests (atom 0))
 
 (defn- pong []
+  (Thread/sleep (+ 20 (rand-int 80)))
+  "pong")
+
+(defn- wrapped-request [request]
   (let [ongoing-reqs (swap! ongoing-requests inc)
-        start (System/currentTimeMillis)]
-    (Thread/sleep (+ 20 (rand-int 80)))
+        start (System/currentTimeMillis)
+        result (request)]
     (swap! ongoing-requests dec)
-    "pong"))
+    result))
 
 (defroutes app-routes
-  (GET "/ping" [] (pong)))
+  (GET "/ping" [] (wrapped-request pong)))
 
 (defn print-ongoing-requests []
   (let [requests @ongoing-requests]
