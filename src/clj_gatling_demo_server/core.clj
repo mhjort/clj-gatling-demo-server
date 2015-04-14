@@ -24,7 +24,7 @@
 (defn run [threads-str]
   (let [threads (if threads-str
                   (read-string threads-str)
-                  1000)
+                  300)
         executor (ScheduledThreadPoolExecutor. 1)
         stop-server-fn (run-server (handler/api app-routes) {:port 8080 :join? false :thread threads})]
     (.scheduleAtFixedRate executor print-ongoing-requests 0 50 TimeUnit/MILLISECONDS)
