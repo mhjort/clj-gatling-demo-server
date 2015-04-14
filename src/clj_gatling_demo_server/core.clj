@@ -10,6 +10,14 @@
   (Thread/sleep (+ 20 (rand-int 80)))
   "pong")
 
+(defn- article-read [id]
+  (Thread/sleep (+ 20 (rand-int 30)))
+  (str "Read " id))
+
+(defn- program-start [id]
+  (Thread/sleep (+ 50 (rand-int 100)))
+  (str "Start " id))
+
 (defn- wrapped-request [request]
   (let [ongoing-reqs (swap! ongoing-requests inc)
         start (System/currentTimeMillis)
@@ -18,7 +26,9 @@
     result))
 
 (defroutes app-routes
-  (GET "/ping" [] (wrapped-request pong)))
+  (GET "/ping" [] (wrapped-request pong))
+  (GET "/metrics/article/read/:id" [id] (wrapped-request (partial article-read id)))
+  (GET "/metrics/program/start/:id" [id] (wrapped-request (partial program-start id))))
 
 (defn print-ongoing-requests []
   (let [requests @ongoing-requests]
