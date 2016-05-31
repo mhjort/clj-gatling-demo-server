@@ -4,7 +4,7 @@ Demo server that could be used to run demo for clj-gatling.
 
 ## Usage 
 
-  lein run <number-of-threads>
+  lein run 500
 
 ## License
 
