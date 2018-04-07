@@ -39,7 +39,7 @@
   (let [port (read-string (or (System/getenv "PORT") "8080"))
         threads (if threads-str
                   (read-string threads-str)
-                  300)
+                  100)
         executor (ScheduledThreadPoolExecutor. 1)
         stop-server-fn (run-server (handler/api app-routes) {:port port :join? false :thread threads})]
     (.scheduleAtFixedRate executor print-ongoing-requests 0 50 TimeUnit/MILLISECONDS)
